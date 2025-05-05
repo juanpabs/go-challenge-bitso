@@ -14,7 +14,7 @@ type cryptoUseCase struct {
 }
 
 type CryptoService interface {
-	GetCryptoValue()
+	GetCryptoValue(domain.CryptoCurrency) (domain.Crypto, error)
 }
 
 func NewCryptoUseCase(srv CryptoService) CryptoUseCase {
@@ -24,5 +24,14 @@ func NewCryptoUseCase(srv CryptoService) CryptoUseCase {
 }
 
 func (uc *cryptoUseCase) GetAllCryptos() ([]domain.Crypto, error) {
+	layout := []domain.Crypto{}
+	for id, cryptoCurrency := range domain.AvailableCryptoCurrencies {
+		crypto, err := uc.cryptoService.GetCryptoValue(cryptoCurrency)
+		if err != nil {
+			return nil, err
+		}
+		crypto.Id = id
+		layout = append(layout, crypto)
+	}
 	return nil, nil
 }

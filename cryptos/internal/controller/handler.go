@@ -1,24 +1,11 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/juanpabs/go-challenge-bitso/cryptos/internal/domain"
 )
-
-type BitsoTickerResponse struct {
-	Success bool `json:"success"`
-	Payload struct {
-		Book      string `json:"book"`
-		Volume    string `json:"volume"`
-		High      string `json:"high"`
-		Last      string `json:"last"`
-		Low       string `json:"low"`
-		Vwap      string `json:"vwap"`
-		Ask       string `json:"ask"`
-		Bid       string `json:"bid"`
-		CreatedAt string `json:"created_at"`
-	} `json:"payload"`
-}
 
 type CryptoUseCase interface {
 	GetAllCryptos() ([]domain.Crypto, error)
@@ -39,26 +26,10 @@ func NewCryptoHandler(cryptoUseCase CryptoUseCase) CryptoHandler {
 }
 
 func (h *cryptoHandler) GetCryptos(c *gin.Context) {
-	// resp, err := http.Get("https://api.bitso.com/v3/ticker/?book=btc_mxn")
-	// if err != nil {
-	// 	log.Println("Error al hacer request a Bitso:", err)
-	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "No se pudo obtener el precio"})
-	// 	return
-	// }
-	// defer resp.Body.Close()
-
-	// var bitsoResp BitsoTickerResponse
-	// if err := json.NewDecoder(resp.Body).Decode(&bitsoResp); err != nil {
-	// 	log.Println("Error al decodificar respuesta de Bitso:", err)
-	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "Respuesta inválida de Bitso"})
-	// 	return
-	// }
-
-	// c.JSON(http.StatusOK, gin.H{
-	// 	"last_price": bitsoResp.Payload.Last,
-	// 	"high":       bitsoResp.Payload.High,
-	// 	"low":        bitsoResp.Payload.Low,
-	// 	"volume":     bitsoResp.Payload.Volume,
-	// })
-	c.JSON(200, nil)
+	cryptos, err := h.cryptoUseCase.GetAllCryptos()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al obtener los precios"})
+		return
+	}
+	c.JSON(http.StatusOK, cryptos)
 }
