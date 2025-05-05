@@ -48,11 +48,11 @@ func GetCryptoFromBitso(crypto domain.CryptoCurrency) (c domain.Crypto, err erro
 			return c, fmt.Errorf("error getting ticker for book %s: %w", bookName, err)
 		}
 
-		c.SetPrice(bookName, bitsoTicker.Payload.Last)
 		c.Model.Date = bitsoTicker.Payload.CreatedAt
+		c.SetPrice(bookName, bitsoTicker.Payload.Last)
 		c.SetTickerSymbol(bookName)
 		c.SetName(bookName)
-
+		c.SetComponent(bookName)
 	}
 	return c, nil
 }

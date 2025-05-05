@@ -33,5 +33,5 @@ func (uc *cryptoUseCase) GetAllCryptos() ([]domain.Crypto, error) {
 		crypto.Id = id
 		layout = append(layout, crypto)
 	}
-	return nil, nil
+	return layout, nil
 }

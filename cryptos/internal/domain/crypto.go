@@ -37,7 +37,7 @@ type CryptoModel struct {
 	Price        Price     `json:"price"`         // The price in different currencies.
 }
 
-func (c Crypto) SetPrice(bookName externalclient.BookName, price string) {
+func (c *Crypto) SetPrice(bookName externalclient.BookName, price string) {
 	priceCurrency := strings.Split(string(bookName), "_")
 	switch priceCurrency[1] {
 	case "mxn":
@@ -47,7 +47,7 @@ func (c Crypto) SetPrice(bookName externalclient.BookName, price string) {
 	}
 }
 
-func (c Crypto) SetTickerSymbol(bookName externalclient.BookName) {
+func (c *Crypto) SetTickerSymbol(bookName externalclient.BookName) {
 	cryptoSymbol := strings.Split(string(bookName), "_")
 	switch cryptoSymbol[0] {
 	case "btc":
@@ -59,7 +59,7 @@ func (c Crypto) SetTickerSymbol(bookName externalclient.BookName) {
 	}
 }
 
-func (c Crypto) SetName(bookName externalclient.BookName) {
+func (c *Crypto) SetName(bookName externalclient.BookName) {
 	name := strings.Split(string(bookName), "_")
 	switch name[0] {
 	case "btc":
@@ -71,11 +71,11 @@ func (c Crypto) SetName(bookName externalclient.BookName) {
 	}
 }
 
-func (c Crypto) SetId(id int) {
+func (c *Crypto) SetId(id int) {
 	c.Id = id
 }
 
-func (c Crypto) SetComponent(bookName externalclient.BookName) {
+func (c *Crypto) SetComponent(bookName externalclient.BookName) {
 	cryptoSymbol := strings.Split(string(bookName), "_")
 	c.Component = "component_" + cryptoSymbol[0]
 }
